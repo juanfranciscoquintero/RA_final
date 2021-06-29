@@ -31,11 +31,12 @@ library(purrr)
 
 
 
+
 #Cargamos el dataset
 #dos aca cada uno pone si ingreso de la data
 #Cadauno usa su directorio
-setwd("C:/Users/vieraa/Documents/GitHub/RA_final" )   
-#setwd("C:/Users/quintej/Desktop/MCD/Regresion Avanzada/" )   #establezco la carpeta donde voy a trabajar
+#setwd("C:/Users/vieraa/Documents/GitHub/RA_final" )   
+setwd("C:/Users/quintej/Desktop/MCD/Regresion Avanzada/" )   #establezco la carpeta donde voy a trabajar
 #setwd("C:/Users/jgiberti/Documents/Univ. Austral - Maestria en Ciencias de Datos/10. Regresion Avanzada/TP/" )   
 #setwd("C:/Users/isant/OneDrive/Desktop/MCD/Regresión Avanzada/TP Final")
 
@@ -59,9 +60,6 @@ clasif_estados <- read_delim("clasif_estados.csv",
 ## Sacamos estado y condado de los dataset
 
 data1 <- dplyr::select(data, pje:crimen)
-
-
-
 
 grafico1<-ggpairs(data1, title="correlogram with ggpairs()") 
 grafico1
@@ -197,7 +195,7 @@ data_dummy$ingpc
 summary(mod_3)   
 
 
-        
+
 #Residual standard error: 8.058 on 2684 degrees of freedom
 #Multiple R-squared:  0.3781,	Adjusted R-squared:  0.3737 
 #F-statistic: 85.88 on 19 and 2684 DF,  p-value: < 2.2e-16
@@ -207,7 +205,7 @@ summary(mod_3)
 
 
 mod_4<- lm(pje ~ edad+pobreza + densidad + mujeres + ahorros + veteranos + ancianos + crimen +Este + veteranos:edad + ancianos:edad + ancianos:ahorros + crimen:densidad +
-              + ahorros:edad + crimen:ancianos + veteranos:ahorros, data = data_dummy)
+             + ahorros:edad + crimen:ancianos + veteranos:ahorros, data = data_dummy)
 summary(mod_4)   
 
 #Residual standard error: 8.083 on 2687 degrees of freedom
@@ -313,13 +311,27 @@ stepAIC(
 
 
 mod_9  <-  lm(formula = pje ~ ahorros + ingpc + pobreza + veteranos + mujeres + 
-                          densidad + crimen + Regiones + Este + ddl_AR + ddl_CA + ddl_CO + 
-                          ddl_DC + ddl_DE + ddl_FL + ddl_IA + ddl_ID + ddl_IL + ddl_IN + 
-                          ddl_KS + ddl_LA + ddl_MA + ddl_ME + ddl_MI + ddl_MN + ddl_MO + 
-                          ddl_MS + ddl_NC + ddl_NE + ddl_NJ + ddl_NM + ddl_NY + ddl_OH + 
-                          ddl_OR + ddl_PA + ddl_TN + ddl_UT + ddl_WA, data = ddl)
+                densidad + crimen + Regiones + Este + ddl_AR + ddl_CA + ddl_CO + 
+                ddl_DC + ddl_DE + ddl_FL + ddl_IA + ddl_ID + ddl_IL + ddl_IN + 
+                ddl_KS + ddl_LA + ddl_MA + ddl_ME + ddl_MI + ddl_MN + ddl_MO + 
+                ddl_MS + ddl_NC + ddl_NE + ddl_NJ + ddl_NM + ddl_NY + ddl_OH + 
+                ddl_OR + ddl_PA + ddl_TN + ddl_UT + ddl_WA, data = ddl)
 summary(mod_9)
 
+#plot(mod_9)
+
+
+excluir <- c(1602, 2184, 948,1297, 1871,1765,2356)
+ddl1 <- slice(ddl, -excluir)
+mod_10  <-  lm(formula = pje ~ ahorros + ingpc + pobreza + veteranos + mujeres + 
+                densidad + crimen + Regiones + Este + ddl_AR + ddl_CA + ddl_CO + 
+                ddl_DC + ddl_DE + ddl_FL + ddl_IA + ddl_ID + ddl_IL + ddl_IN + 
+                ddl_KS + ddl_LA + ddl_MA + ddl_ME + ddl_MI + ddl_MN + ddl_MO + 
+                ddl_MS + ddl_NC + ddl_NE + ddl_NJ + ddl_NM + ddl_NY + ddl_OH + 
+                ddl_OR + ddl_PA + ddl_TN + ddl_UT + ddl_WA, data = ddl1)
+summary(mod_10)
+
+plot(mod_10)
 
 ##########
 
@@ -390,7 +402,7 @@ influenceIndexPlot(mod_4)
 
 mejorsub <- regsubsets(
   x = pje ~ edad + ahorros + ingpc + pobreza + veteranos + mujeres + densidad + ancianos + crimen +
-  Este + veteranos:edad + ancianos:edad + ancianos:ahorros + crimen:densidad +
+    Este + veteranos:edad + ancianos:edad + ancianos:ahorros + crimen:densidad +
     + ahorros:edad + crimen:ancianos + veteranos:ahorros, 
   data = data_dummy
 )
@@ -433,7 +445,7 @@ stepAIC(
 )
 
 mod_forward <- lm(formula = pje ~ pobreza + Este + densidad + mujeres + veteranos + 
-     ahorros + data_dummy_4 + ingpc, data = data_dummy)
+                    ahorros + data_dummy_4 + ingpc, data = data_dummy)
 
 summary(mod_forward)
 
@@ -591,7 +603,7 @@ influencePlot(m6)
 #1546 -2.55760944 0.124408191 0.0927520124
 #1602 -0.65308088 0.973947894 1.5948479827
 #2184  3.86877184 0.001587441 0.0023674894
- 
+
 
 influenceIndexPlot(m6)
 
@@ -1019,7 +1031,7 @@ res
 # la diferencia entre 2 SCR sucesivas o SCE sucesivas es la contribucion de la SC secuencial
 # x ej el valor 70344 es el aporte que hace el predictor x1 para explicar la respuesta comparado con un modelo que no tiene ningun predictor
 
-  
+
 r1.0+r2.1+ r3.12+r4.123+r5.1234+r6.12345+r7.123456+r8.1234567
 #[1] 91504.45 
 
